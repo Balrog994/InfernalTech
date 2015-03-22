@@ -1,9 +1,7 @@
 {
     "variants" : {
         "normal" : { "model": "infernaltech:energy_accumulator" },
-        "facing=north" : { "model": "infernaltech:energy_accumulator" },
-        "facing=south" : { "model": "infernaltech:energy_accumulator", "y" : 180 },
-        "facing=west" : { "model": "infernaltech:energy_accumulator", "y" : 270 },
-        "facing=east" : { "model": "infernaltech:energy_accumulator", "y" : 90 }
+        "tier=0" : { "model": "infernaltech:energy_accumulator_creative" },
+        "tier=1" : { "model": "infernaltech:energy_accumulator_basic" }
     }
 }

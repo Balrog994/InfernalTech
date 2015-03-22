@@ -1,5 +1,5 @@
 {
-    "parent": "infernaltech:block/energy_accumulator",
+    "parent": "infernaltech:block/energy_accumulator_basic",
     "display" : {
         "thirdperson" : {
             "rotation": [ 10, -45, 170 ],

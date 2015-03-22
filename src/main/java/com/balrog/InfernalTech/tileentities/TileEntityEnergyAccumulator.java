@@ -148,13 +148,23 @@ public class TileEntityEnergyAccumulator extends TileEntity implements IEnergyRe
 			for(EnumFacing face : EnumFacing.values())
 			{
 				if(this.receivers[face.ordinal()] != null) {
-					int receivedEnergy = this.receivers[face.ordinal()].receiveEnergy(face.getOpposite(), this.energyStorage.getMaxExtract(), false);
-					this.energyStorage.extractEnergy(receivedEnergy, false);
+					if(this.getBlockMetadata() == 0) {
+						this.receivers[face.ordinal()].receiveEnergy(face.getOpposite(), this.energyStorage.getMaxExtract(), false);
+					} else {
+						int energyToSend = this.energyStorage.extractEnergy(this.energyStorage.getMaxExtract(), true);
+						int receivedEnergy = this.receivers[face.ordinal()].receiveEnergy(face.getOpposite(), energyToSend, false);
+						this.energyStorage.extractEnergy(receivedEnergy, false);
+					}
 				}
 				
 				if(this.providers[face.ordinal()] != null) {
-					int extractedEnergy = this.providers[face.ordinal()].extractEnergy(face.getOpposite(), this.energyStorage.getMaxReceive(), false);
-					this.energyStorage.receiveEnergy(extractedEnergy, false);
+					if(this.getBlockMetadata() == 0) {
+						this.providers[face.ordinal()].extractEnergy(face.getOpposite(), this.energyStorage.getMaxReceive(), false);
+					} else {
+						int energyToReceive = this.energyStorage.receiveEnergy(this.energyStorage.getMaxReceive(), true);
+						int extractedEnergy = this.providers[face.ordinal()].extractEnergy(face.getOpposite(), energyToReceive, false);
+						this.energyStorage.receiveEnergy(extractedEnergy, false);
+					}
 				}
 			}
 		}

@@ -16,8 +16,12 @@ import com.google.common.collect.Lists;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryHelper;
@@ -30,8 +34,12 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockEnergyAccumulator extends InfernalTechBlock {
+	
+	public static final PropertyInteger TIER = PropertyInteger.create("tier", 0, 1);
 	
 	public static final String UnlocalizedName = "energy_accumulator"; 
 	public static final String ID = "energy_accumulator"; 
@@ -42,17 +50,25 @@ public class BlockEnergyAccumulator extends InfernalTechBlock {
 	protected BlockEnergyAccumulator() {
 		super(Material.iron);
 
+		this.setDefaultState(this.getDefaultState().withProperty(TIER, 0));
+		
 		this.setLightOpacity(0);
 		this.setUnlocalizedName(BlockEnergyAccumulator.UnlocalizedName);
 		this.setCreativeTab(CreativeTabs.tabBlock);
 		this.setHardness(10.0f);
 	}
-
+	
 	public static void init(CommonProxy proxy)
 	{
-		GameRegistry.registerBlock(BlockEnergyAccumulator.instance, BlockEnergyAccumulator.ID);
+		GameRegistry.registerBlock(BlockEnergyAccumulator.instance, ItemBlockEnergyAccumulator.class, BlockEnergyAccumulator.ID);
 		proxy.registerTileEntity(TileEntityEnergyAccumulator.class, BlockEnergyAccumulator.ID + "TileEntity", new TileEntityConfigurableSidesRenderer());
-		proxy.registerInventoryModel(Item.getItemFromBlock(BlockEnergyAccumulator.instance), ID, 0);
+		
+		proxy.addModelBakeryVariant(Item.getItemFromBlock(BlockEnergyAccumulator.instance), InfernalTech.MODID.toLowerCase() + ":" + ID + ".tier0");
+		proxy.addModelBakeryVariant(Item.getItemFromBlock(BlockEnergyAccumulator.instance), InfernalTech.MODID.toLowerCase() + ":" + ID + ".tier1");
+		
+		proxy.registerInventoryModel(Item.getItemFromBlock(BlockEnergyAccumulator.instance), ID + ".tier0", 0);
+		proxy.registerInventoryModel(Item.getItemFromBlock(BlockEnergyAccumulator.instance), ID + ".tier1", 1);
+		
 	}
 	
 		@Override
@@ -96,5 +112,41 @@ public class BlockEnergyAccumulator extends InfernalTechBlock {
 			TileEntityEnergyAccumulator energyAccumulator = (TileEntityEnergyAccumulator)tileEntity;
 			energyAccumulator.updateNeighbors();
 		}
+	}
+	
+	@Override
+	protected BlockState createBlockState() {
+		// TODO Auto-generated method stub
+		return new BlockState(this, new IProperty[] { TIER });
+	}
+	
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return (Integer) state.getValue(TIER);
+	}
+	
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return this.getDefaultState().withProperty(TIER, meta);
+	}
+	
+	@Override
+	public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+		return this.getDefaultState().withProperty(TIER, meta);
+	}
+	
+	@Override
+  	@SideOnly(Side.CLIENT)
+	public void getSubBlocks(Item itemIn, CreativeTabs tab, List list)
+	{
+		for(int tier = 0; tier <= 1; tier++) {
+			list.add(new ItemStack(itemIn, 1, tier));
+		}
+	}
+	
+	@Override
+	public int damageDropped(IBlockState state)
+	{
+		return this.getMetaFromState(state);
 	}
 }
