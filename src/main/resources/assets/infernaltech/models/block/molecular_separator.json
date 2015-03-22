@@ -1,0 +1,8 @@
+{
+    "parent" : "block/orientable",
+    "textures" : {
+        "top": "infernaltech:blocks/Machine_Top",
+        "front": "infernaltech:blocks/Machine_Face_Pulverizer",
+        "side": "infernaltech:blocks/Machine_Side"
+    }
+}

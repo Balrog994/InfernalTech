@@ -1,5 +1,7 @@
 .gradle
 build/
+bin/
+eclipse/
 
 # Ignore Gradle GUI config
 gradle-app.setting
@@ -50,3 +52,13 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+forge-1.8-11.14.0.1295-1.8-changelog.txt
+CREDITS-fml.txt
+src.rar
+README.txt
+MinecraftForge-Credits.txt
+MinecraftForge-License.txt
+LICENSE-fml.txt
+.project
+.classpath
+.settings/org.eclipse.jdt.core.prefs
