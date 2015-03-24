@@ -1,0 +1,32 @@
+{
+    "textures" : {
+        "center": "infernaltech:blocks/channel_center",
+        "channel": "infernaltech:blocks/channel_energy"
+    },
+    "elements" : [
+        {
+            "from" : [ 6, 6, 6 ],
+            "to" : [10,10,10],
+            "faces": {
+                "down":  { "texture": "#center", "tintindex": 0 },
+                "up":    { "texture": "#center", "tintindex": 0 },
+                "north": { "texture": "#center", "tintindex": 0 },
+                "south": { "texture": "#center", "tintindex": 0 },
+                "west":  { "texture": "#center", "tintindex": 0 },
+                "east":  { "texture": "#center", "tintindex": 0 }
+            }
+        },
+        {
+            "from" : [9,10,9],
+            "to" : [ 7, 16, 7 ],
+            "faces": {
+                "down":  { "texture": "#channel", "tintindex": 0 },
+                "up":    { "texture": "#channel", "tintindex": 0 },
+                "north": { "texture": "#channel", "tintindex": 0 },
+                "south": { "texture": "#channel", "tintindex": 0 },
+                "west":  { "texture": "#channel", "tintindex": 0 },
+                "east":  { "texture": "#channel", "tintindex": 0 }
+            }
+        }
+    ]
+}

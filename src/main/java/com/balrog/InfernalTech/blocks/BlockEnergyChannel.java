@@ -18,6 +18,7 @@ import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -60,6 +61,29 @@ public class BlockEnergyChannel extends InfernalTechBlock {
 		proxy.registerInventoryModel(Item.getItemFromBlock(BlockEnergyChannel.instance), ID, 0);
 	}
 	
+	public static void setState(boolean north, boolean south, boolean east, boolean west, boolean down, boolean up, World worldIn, BlockPos pos)
+	{
+        TileEntity tileentity = worldIn.getTileEntity(pos);
+        
+        IBlockState newState = BlockEnergyChannel.instance.getDefaultState()
+        		.withProperty(NORTH, north)
+				.withProperty(SOUTH, south)
+				.withProperty(EAST, east)
+				.withProperty(WEST, west)
+				.withProperty(DOWN, down)
+				.withProperty(UP, up);
+        
+        worldIn.setBlockState(pos, newState, 3);
+        worldIn.setBlockState(pos, newState, 3);
+        
+        if(tileentity != null) {
+        	tileentity.validate();
+        	worldIn.setTileEntity(pos, tileentity);
+        }
+        
+        worldIn.markBlockForUpdate(pos);
+	}
+	
 	@Override
     public int getRenderType() 
 	{ 
@@ -85,6 +109,29 @@ public class BlockEnergyChannel extends InfernalTechBlock {
 	public IBlockState getStateFromMeta(int meta) {
 		return this.getDefaultState();
 	}
+	
+	@Override
+	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+		TileEntity te = worldIn.getTileEntity(pos);
+        if(te instanceof TileEntityEnergyChannel)
+        {
+        	TileEntityEnergyChannel cte = (TileEntityEnergyChannel) te;
+            return cte.getState();
+        }
+        return state;
+	}
+	
+	@Override
+    public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos)
+    {
+        TileEntity te = world.getTileEntity(pos);
+        if(te instanceof TileEntityEnergyChannel)
+        {
+        	TileEntityEnergyChannel cte = (TileEntityEnergyChannel) te;
+            return cte.getState();
+        }
+        return state;
+    }
 	
 	@Override
 	public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock) {

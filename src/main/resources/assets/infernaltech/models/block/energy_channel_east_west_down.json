@@ -1,0 +1,331 @@
+{
+  "textures": {
+    "channel": "infernaltech:blocks/channel_energy_bundled"
+  },
+  "elements": [
+    {
+      "type": "cube",
+      "from": [
+        6,
+        6,
+        6
+      ],
+      "to": [
+        10,
+        10,
+        10
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            0,
+            0,
+            8,
+            8
+          ],
+          "textureFacing": "down",
+          "cull": false,
+          "texture": "#channel"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            8,
+            8
+          ],
+          "textureFacing": "up",
+          "cull": false,
+          "texture": "#channel"
+        },
+        "north": {
+          "uv": [
+            0,
+            0,
+            8,
+            8
+          ],
+          "textureFacing": "north",
+          "cull": false,
+          "texture": "#channel"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            8,
+            8
+          ],
+          "textureFacing": "south",
+          "cull": false,
+          "texture": "#channel"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            8,
+            8
+          ],
+          "textureFacing": "west",
+          "cull": false,
+          "texture": "#channel"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            8,
+            8
+          ],
+          "textureFacing": "east",
+          "cull": false,
+          "texture": "#channel"
+        }
+      }
+    },
+    {
+      "type": "cube",
+      "from": [
+        10,
+        7,
+        7
+      ],
+      "to": [
+        16,
+        9,
+        9
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            0,
+            11,
+            11,
+            16
+          ],
+          "textureFacing": "down",
+          "cull": false,
+          "texture": "#channel"
+        },
+        "up": {
+          "uv": [
+            0,
+            11,
+            11,
+            16
+          ],
+          "textureFacing": "up",
+          "cull": false,
+          "texture": "#channel"
+        },
+        "north": {
+          "uv": [
+            0,
+            11,
+            11,
+            16
+          ],
+          "textureFacing": "north",
+          "cull": false,
+          "texture": "#channel"
+        },
+        "south": {
+          "uv": [
+            0,
+            11,
+            11,
+            16
+          ],
+          "textureFacing": "south",
+          "cull": false,
+          "texture": "#channel"
+        },
+        "west": {
+          "uv": [
+            0,
+            11,
+            11,
+            16
+          ],
+          "textureFacing": "west",
+          "cull": false,
+          "texture": "#channel"
+        },
+        "east": {
+          "uv": [
+            0,
+            11,
+            11,
+            16
+          ],
+          "textureFacing": "east",
+          "cull": false,
+          "texture": "#channel"
+        }
+      }
+    },
+    {
+      "type": "cube",
+      "from": [
+        0,
+        7,
+        7
+      ],
+      "to": [
+        6,
+        9,
+        9
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            0,
+            11,
+            11,
+            16
+          ],
+          "textureFacing": "down",
+          "cull": false,
+          "texture": "#channel"
+        },
+        "up": {
+          "uv": [
+            0,
+            11,
+            11,
+            16
+          ],
+          "textureFacing": "up",
+          "cull": false,
+          "texture": "#channel"
+        },
+        "north": {
+          "uv": [
+            0,
+            11,
+            11,
+            16
+          ],
+          "textureFacing": "north",
+          "cull": false,
+          "texture": "#channel"
+        },
+        "south": {
+          "uv": [
+            0,
+            11,
+            11,
+            16
+          ],
+          "textureFacing": "south",
+          "cull": false,
+          "texture": "#channel"
+        },
+        "west": {
+          "uv": [
+            0,
+            11,
+            11,
+            16
+          ],
+          "textureFacing": "west",
+          "cull": false,
+          "texture": "#channel"
+        },
+        "east": {
+          "uv": [
+            0,
+            11,
+            11,
+            16
+          ],
+          "textureFacing": "east",
+          "cull": false,
+          "texture": "#channel"
+        }
+      }
+    },
+    {
+      "type": "cube",
+      "from": [
+        7,
+        0,
+        7
+      ],
+      "to": [
+        9,
+        6,
+        9
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            11,
+            0,
+            16,
+            11
+          ],
+          "textureFacing": "down",
+          "cull": false,
+          "texture": "#channel"
+        },
+        "up": {
+          "uv": [
+            11,
+            0,
+            16,
+            11
+          ],
+          "textureFacing": "up",
+          "cull": false,
+          "texture": "#channel"
+        },
+        "north": {
+          "uv": [
+            11,
+            0,
+            16,
+            11
+          ],
+          "textureFacing": "north",
+          "cull": false,
+          "texture": "#channel"
+        },
+        "south": {
+          "uv": [
+            11,
+            0,
+            16,
+            11
+          ],
+          "textureFacing": "south",
+          "cull": false,
+          "texture": "#channel"
+        },
+        "west": {
+          "uv": [
+            11,
+            0,
+            16,
+            11
+          ],
+          "textureFacing": "west",
+          "cull": false,
+          "texture": "#channel"
+        },
+        "east": {
+          "uv": [
+            11,
+            0,
+            16,
+            11
+          ],
+          "textureFacing": "east",
+          "cull": false,
+          "texture": "#channel"
+        }
+      }
+    }
+  ]
+}

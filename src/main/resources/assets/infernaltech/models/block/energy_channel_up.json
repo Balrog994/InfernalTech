@@ -83,6 +83,87 @@
           "texture": "#channel"
         }
       }
+    },
+    {
+      "type": "cube",
+      "from": [
+        7,
+        10,
+        7
+      ],
+      "to": [
+        9,
+        16,
+        9
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            11,
+            0,
+            16,
+            11
+          ],
+          "textureFacing": "down",
+          "cull": false,
+          "texture": "#channel"
+        },
+        "up": {
+          "uv": [
+            11,
+            0,
+            16,
+            11
+          ],
+          "textureFacing": "up",
+          "cull": false,
+          "texture": "#channel"
+        },
+        "north": {
+          "uv": [
+            11,
+            0,
+            16,
+            11
+          ],
+          "textureFacing": "north",
+          "cull": false,
+          "texture": "#channel"
+        },
+        "south": {
+          "uv": [
+            11,
+            0,
+            16,
+            11
+          ],
+          "textureFacing": "south",
+          "cull": false,
+          "texture": "#channel"
+        },
+        "west": {
+          "uv": [
+            11,
+            0,
+            16,
+            11
+          ],
+          "textureFacing": "west",
+          "cull": false,
+          "texture": "#channel"
+        },
+        "east": {
+          "uv": [
+            11,
+            0,
+            16,
+            11
+          ],
+          "textureFacing": "east",
+          "cull": false,
+          "texture": "#channel"
+        }
+      }
     }
   ]
 }
