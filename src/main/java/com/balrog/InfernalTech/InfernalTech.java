@@ -1,6 +1,7 @@
 package com.balrog.InfernalTech;
 
 import com.balrog.InfernalTech.blocks.BlockEnergyAccumulator;
+import com.balrog.InfernalTech.blocks.BlockEnergyChannel;
 import com.balrog.InfernalTech.blocks.BlockMolecularSeparator;
 import com.balrog.InfernalTech.materials.ItemCoalPowder;
 
@@ -43,6 +44,7 @@ public class InfernalTech {
     	
     	BlockMolecularSeparator.init(proxy);
     	BlockEnergyAccumulator.init(proxy);
+    	BlockEnergyChannel.init(proxy);
     	ItemCoalPowder.init(proxy);
     }
     

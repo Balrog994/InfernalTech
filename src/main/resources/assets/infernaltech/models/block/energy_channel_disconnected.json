@@ -1,0 +1,19 @@
+{
+    "textures" : {
+        "center": "infernaltech:blocks/channel_center"
+    },
+    "elements" : [
+        {
+            "from" : [ 6, 6, 6 ],
+            "to" : [10,10,10],
+            "faces": {
+                "down":  { "texture": "#center", "cullface": "down", "tintindex": 0 },
+                "up":    { "texture": "#center", "cullface": "up", "tintindex": 0 },
+                "north": { "texture": "#center", "cullface": "north", "tintindex": 0 },
+                "south": { "texture": "#center", "cullface": "south", "tintindex": 0 },
+                "west":  { "texture": "#center", "cullface": "west", "tintindex": 0 },
+                "east":  { "texture": "#center", "cullface": "east", "tintindex": 0 }
+            }
+        }
+    ]
+}
