@@ -1,9 +1,13 @@
 package com.balrog.InfernalTech.tileentities;
 
 import java.util.Arrays;
+import java.util.List;
 
 import com.balrog.InfernalTech.blocks.BlockEnergyChannel;
+import com.balrog.InfernalTech.energy.EnergyNetwork;
+import com.balrog.InfernalTech.energy.IEnergyChannel;
 import com.balrog.InfernalTech.enums.EnumFaceMode;
+import com.google.common.collect.Lists;
 
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyProvider;
@@ -25,14 +29,16 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.common.FMLLog;
 
-public class TileEntityEnergyChannel extends TileEntity implements IEnergyReceiver, IEnergyProvider, IPersistable, IUpdatePlayerListBox, IToolHarvestable {
+public class TileEntityEnergyChannel extends TileEntity implements IEnergyReceiver, IEnergyProvider, IEnergyChannel, IPersistable, IUpdatePlayerListBox, IToolHarvestable {
 
 	private IBlockState state;
 	private EnergyStorage energyStorage = new EnergyStorage(640, 640, 640);
 	private IEnergyReceiver[] receivers = new IEnergyReceiver[6];
 	private IEnergyProvider[] providers = new IEnergyProvider[6];
+	private List<IEnergyChannel> channels = Lists.newArrayList();
 	private boolean[] connections = new boolean[6];
 	private boolean neighborsDirty = true;
+	private EnergyNetwork energyNetwork;
 	
 	@Override
 	public boolean canConnectEnergy(EnumFacing from) {
@@ -102,6 +108,8 @@ public class TileEntityEnergyChannel extends TileEntity implements IEnergyReceiv
 	public void update() {
 		if(!this.worldObj.isRemote)
 		{
+			this.updateNetwork();
+			
 			if(this.neighborsDirty )
 				this.updateNeighbors();
 			
@@ -135,29 +143,73 @@ public class TileEntityEnergyChannel extends TileEntity implements IEnergyReceiv
 		}
 	}
 
+	private void updateNetwork() {
+		if(this.getNetwork() != null)
+			return;
+		
+		if(this.attachToAdjacentNetworkIfUnique())
+			return;
+		
+		EnergyNetwork network = new EnergyNetwork();
+		network.init(this);
+		
+		if(getNetwork() != null && !this.worldObj.isRemote) {
+			this.worldObj.notifyNeighborsOfStateChange(this.pos, getBlockType());
+		}
+	}
+
+	private boolean attachToAdjacentNetworkIfUnique() {
+		EnergyNetwork network = null;
+		for(IEnergyChannel channel : this.channels) {
+			if(network == null)
+				network = channel.getNetwork();
+			else if(network != channel.getNetwork())
+				return false;
+		}
+		
+		if(network == null || !this.registerToNetwork(network))
+			return false;
+		
+		network.addChannel(this);
+		network.invalidate();
+		return true;
+	}
+
 	public void updateNeighbors() {
 		if(!this.worldObj.isRemote) {
 			FMLLog.info("Updating Neighbors");
 			
 			boolean[] oldConnections = this.connections.clone();
+			this.channels.clear();
 			
 			for(EnumFacing face : EnumFacing.values())
 			{
 				BlockPos blockPos = this.pos.offset(face);
 				TileEntity entity = this.worldObj.getTileEntity(blockPos);
-				if(entity instanceof IEnergyReceiver) {
-					this.receivers[face.ordinal()] = ((IEnergyReceiver)entity);
-				} else {
+				boolean connected = false;
+				
+				if(entity instanceof IEnergyChannel) {
+					this.channels.add((IEnergyChannel)entity);
 					this.receivers[face.ordinal()] = null;
-				}
-				
-				if(entity instanceof IEnergyProvider) {
-					this.providers[face.ordinal()] = ((IEnergyProvider)entity);
-				} else {
 					this.providers[face.ordinal()] = null;
+					connected = true;
+				} else {
+					if(entity instanceof IEnergyReceiver) {
+						this.receivers[face.ordinal()] = ((IEnergyReceiver)entity);
+						connected = true;
+					} else {
+						this.receivers[face.ordinal()] = null;
+					}
+					
+					if(entity instanceof IEnergyProvider) {
+						this.providers[face.ordinal()] = ((IEnergyProvider)entity);
+						connected = true;
+					} else {
+						this.providers[face.ordinal()] = null;
+					}
 				}
 				
-				this.connections[face.ordinal()] = this.receivers[face.ordinal()] != null || this.providers[face.ordinal()] != null;
+				this.connections[face.ordinal()] = connected;
 			}
 			
 			if(!Arrays.equals(this.connections, oldConnections)) {
@@ -213,5 +265,21 @@ public class TileEntityEnergyChannel extends TileEntity implements IEnergyReceiv
 
 	public void invalidateNeighbors() {
 		this.neighborsDirty = true;
+	}
+
+	@Override
+	public boolean registerToNetwork(EnergyNetwork energyNetwork) {
+		this.energyNetwork = energyNetwork;
+		return true;
+	}
+
+	@Override
+	public List<IEnergyChannel> getConnectedChannels() {
+		return this.channels;
+	}
+
+	@Override
+	public EnergyNetwork getNetwork() {
+		return this.energyNetwork;
 	}
 }

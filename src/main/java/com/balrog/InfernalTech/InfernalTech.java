@@ -3,8 +3,11 @@ package com.balrog.InfernalTech;
 import com.balrog.InfernalTech.blocks.BlockEnergyAccumulator;
 import com.balrog.InfernalTech.blocks.BlockEnergyChannel;
 import com.balrog.InfernalTech.blocks.BlockMolecularSeparator;
+import com.balrog.InfernalTech.energy.EnergyNetworkHandler;
 import com.balrog.InfernalTech.materials.ItemCoalPowder;
 
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -41,6 +44,8 @@ public class InfernalTech {
     public void init(FMLInitializationEvent event)
     {
     	NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
+    	MinecraftForge.EVENT_BUS.register(EnergyNetworkHandler.instance);
+        FMLCommonHandler.instance().bus().register(EnergyNetworkHandler.instance);
     	
     	BlockMolecularSeparator.init(proxy);
     	BlockEnergyAccumulator.init(proxy);
