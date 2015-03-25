@@ -1,0 +1,6 @@
+tile.molecular_separator.name=Séparateur moléculaire
+block.molecular_separator.name=Séparateur moléculaire
+
+tile.energy_accumulator.name=Accumulateur énergétique
+tile.energy_accumulator.tier0.name=Accumulateur énergétique créatif
+tile.energy_accumulator.tier1.name=Accumulateur énergétique de base
