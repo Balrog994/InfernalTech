@@ -32,7 +32,6 @@ import net.minecraftforge.fml.common.FMLLog;
 
 public class TileEntityEnergyChannel extends TileEntity implements IEnergyChannel, IPersistable, IToolHarvestable, IUpdatePlayerListBox {
 
-	private IBlockState state;
 	private EnergyStorage energyStorage = new EnergyStorage(640, 640, 640);
 	private IEnergyReceiver[] receivers = new IEnergyReceiver[6];
 	private List<IEnergyChannel> channels = Lists.newArrayList();
@@ -106,10 +105,17 @@ public class TileEntityEnergyChannel extends TileEntity implements IEnergyChanne
 	
 	@Override
 	public void update() {
-		if(!this.worldObj.isRemote)
+		try
 		{
-			this.updateNetwork(this.worldObj);
-			this.updateNeighbors(this.worldObj);
+			if(!this.worldObj.isRemote)
+			{
+				this.updateNetwork(this.worldObj);
+				this.updateNeighbors(this.worldObj);
+			}
+		}
+		catch(Exception ex)
+		{
+			FMLLog.severe("Exception in Channel update: (%s)", ex.toString());
 		}
 	}
 
@@ -128,7 +134,7 @@ public class TileEntityEnergyChannel extends TileEntity implements IEnergyChanne
 		network.init(world, this);
 		
 		if(getNetwork() != null && !world.isRemote) {
-			world.notifyNeighborsOfStateChange(this.pos, getBlockType());
+			world.notifyBlockOfStateChange(this.pos, getBlockType());
 		}
 	}
 
@@ -190,7 +196,6 @@ public class TileEntityEnergyChannel extends TileEntity implements IEnergyChanne
 				this.connections[face.ordinal()] = connected;
 			}
 			
-			this.state = null;
 			world.markBlockForUpdate(this.pos);
 		} else {		
 			this.markDirty();
@@ -222,28 +227,18 @@ public class TileEntityEnergyChannel extends TileEntity implements IEnergyChanne
 		NBTTagCompound tagCompound = pkt.getNbtCompound();
 		readFromNBT(tagCompound);
 
-		this.state = null;
 		this.worldObj.markBlockForUpdate(this.pos);
 	}
 	
-	public IBlockState getState() {
-		if(state == null)
-        {
-            state = getBlockType().getDefaultState()
-            		.withProperty(BlockEnergyChannel.NORTH, this.hasConnection(EnumFacing.NORTH))
-    				.withProperty(BlockEnergyChannel.SOUTH, this.hasConnection(EnumFacing.SOUTH))
-    				.withProperty(BlockEnergyChannel.EAST, this.hasConnection(EnumFacing.EAST))
-    				.withProperty(BlockEnergyChannel.WEST, this.hasConnection(EnumFacing.WEST))
-    				.withProperty(BlockEnergyChannel.DOWN, this.hasConnection(EnumFacing.DOWN))
-    				.withProperty(BlockEnergyChannel.UP, this.hasConnection(EnumFacing.UP));
-        }
-        return state;
+	public IBlockState getState(IBlockState state) {
+		return state
+    		.withProperty(BlockEnergyChannel.NORTH, this.hasConnection(EnumFacing.NORTH))
+			.withProperty(BlockEnergyChannel.SOUTH, this.hasConnection(EnumFacing.SOUTH))
+			.withProperty(BlockEnergyChannel.EAST, this.hasConnection(EnumFacing.EAST))
+			.withProperty(BlockEnergyChannel.WEST, this.hasConnection(EnumFacing.WEST))
+			.withProperty(BlockEnergyChannel.DOWN, this.hasConnection(EnumFacing.DOWN))
+			.withProperty(BlockEnergyChannel.UP, this.hasConnection(EnumFacing.UP));
 	}
-	
-	public void setState(IBlockState state)
-    {
-        this.state = state;
-    }
 	
 	private boolean hasConnection(EnumFacing side)
 	{
@@ -324,8 +319,7 @@ public class TileEntityEnergyChannel extends TileEntity implements IEnergyChanne
 		FMLLog.info("onBreakBlock in TileEntity");
 		
 		for(IEnergyChannel channel : this.channels) {
-			channel.removeChannelConnection(this);
-			channel.invalidate();
+			channel.removeChannelConnection(worldIn, this);
 		}
 		this.channels.clear();
 		this.receivers = new IEnergyReceiver[6];
@@ -334,15 +328,10 @@ public class TileEntityEnergyChannel extends TileEntity implements IEnergyChanne
 		if(network != null)
 			network.destroy();
 	}
-	
-	@Override
-	public void invalidate() {
-		super.invalidate();
-		this.invalidateNeighbors();
-	}
 
 	@Override
-	public void removeChannelConnection(IEnergyChannel channel) {
+	public void removeChannelConnection(World world, IEnergyChannel channel) {
 		this.channels.remove(channel);
+		world.markBlockForUpdate(channel.getPosition());
 	}
 }

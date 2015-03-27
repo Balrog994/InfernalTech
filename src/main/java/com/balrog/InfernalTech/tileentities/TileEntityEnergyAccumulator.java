@@ -191,12 +191,6 @@ public class TileEntityEnergyAccumulator extends TileEntity implements IEnergyRe
 		this.neighborsDirty = false;
 	}
 	
-	@Override
-	public void invalidate() {
-		super.invalidate();
-		this.invalidateNeighbors();
-	}
-	
 	public void invalidateNeighbors()
 	{
 		this.neighborsDirty = true;

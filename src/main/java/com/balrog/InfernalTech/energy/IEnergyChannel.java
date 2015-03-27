@@ -17,8 +17,6 @@ public interface IEnergyChannel extends IEnergyHandler {
 
 	EnergyNetwork getNetwork();
 
-	void invalidate();
-
 	BlockPos getPosition();
 
 	IEnergyReceiver getReceiver(EnumFacing face);
@@ -30,6 +28,6 @@ public interface IEnergyChannel extends IEnergyHandler {
 
 	void setEnergyStorage(int energy);
 
-	void removeChannelConnection(IEnergyChannel channel);
+	void removeChannelConnection(World world, IEnergyChannel channel);
 
 }

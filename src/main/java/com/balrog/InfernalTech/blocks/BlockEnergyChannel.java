@@ -75,7 +75,6 @@ public class BlockEnergyChannel extends InfernalTechBlock {
 				.withProperty(UP, up);
         
         worldIn.setBlockState(pos, newState, 3);
-        worldIn.setBlockState(pos, newState, 3);
         
         if(tileentity != null) {
         	tileentity.validate();
@@ -117,7 +116,7 @@ public class BlockEnergyChannel extends InfernalTechBlock {
         if(te instanceof TileEntityEnergyChannel)
         {
         	TileEntityEnergyChannel cte = (TileEntityEnergyChannel) te;
-            return cte.getState();
+            return cte.getState(state);
         }
         return state;
 	}
@@ -129,7 +128,7 @@ public class BlockEnergyChannel extends InfernalTechBlock {
         if(te instanceof TileEntityEnergyChannel)
         {
         	TileEntityEnergyChannel cte = (TileEntityEnergyChannel) te;
-            return cte.getState();
+            return cte.getState(state);
         }
         return state;
     }
