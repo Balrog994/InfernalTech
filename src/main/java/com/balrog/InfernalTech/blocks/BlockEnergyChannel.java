@@ -20,6 +20,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class BlockEnergyChannel extends InfernalTechBlock {
@@ -140,6 +141,28 @@ public class BlockEnergyChannel extends InfernalTechBlock {
 			TileEntityEnergyChannel energyChannel = (TileEntityEnergyChannel)tileEntity;
 			energyChannel.invalidateNeighbors();
 		}
+	}
+	
+	@Override
+	public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
+		TileEntity tileEntity = world.getTileEntity(pos);
+		if(tileEntity instanceof TileEntityEnergyChannel) {
+			TileEntityEnergyChannel energyChannel = (TileEntityEnergyChannel)tileEntity;
+			energyChannel.invalidateNeighbors();
+		}
+	}
+	
+	@Override
+	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+		FMLLog.info("Block Broken (%s)", pos.toString());
+		
+		TileEntity tileEntity = worldIn.getTileEntity(pos);
+		if(tileEntity instanceof TileEntityEnergyChannel) {
+			TileEntityEnergyChannel energyChannel = (TileEntityEnergyChannel)tileEntity;
+			energyChannel.onBreakBlock(worldIn);
+		}		
+		
+		super.breakBlock(worldIn, pos, state);
 	}
 	
 	@Override

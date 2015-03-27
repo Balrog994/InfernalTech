@@ -32,7 +32,6 @@ public class TileEntityEnergyAccumulator extends TileEntity implements IEnergyRe
 	
 	public EnergyStorage energyStorage = new EnergyStorage(400000, 80, 80);
 	private IEnergyReceiver[] receivers = new IEnergyReceiver[6];
-	private IEnergyProvider[] providers = new IEnergyProvider[6];
 	private boolean neighborsDirty = true;;
 	
 	public void readCommonNBT(NBTTagCompound compound)
@@ -142,8 +141,7 @@ public class TileEntityEnergyAccumulator extends TileEntity implements IEnergyRe
 	public void update() {
 		if(!this.worldObj.isRemote)
 		{
-			if(this.neighborsDirty )
-				this.updateNeighbors();
+			this.updateNeighbors();
 			
 			for(EnumFacing face : EnumFacing.values())
 			{
@@ -169,31 +167,14 @@ public class TileEntityEnergyAccumulator extends TileEntity implements IEnergyRe
 						}
 					}
 				}
-				
-				/*if(this.receivers[face.ordinal()] != null) {
-					if(this.getBlockMetadata() == 0) {
-						this.receivers[face.ordinal()].receiveEnergy(face.getOpposite(), this.energyStorage.getMaxExtract(), false);
-					} else {
-						int energyToSend = this.energyStorage.extractEnergy(this.energyStorage.getMaxExtract(), true);
-						int receivedEnergy = this.receivers[face.ordinal()].receiveEnergy(face.getOpposite(), energyToSend, false);
-						this.energyStorage.extractEnergy(receivedEnergy, false);
-					}
-				}*/
-				
-				/*if(this.providers[face.ordinal()] != null) {
-					if(this.getBlockMetadata() == 0) {
-						this.providers[face.ordinal()].extractEnergy(face.getOpposite(), this.energyStorage.getMaxReceive(), false);
-					} else {
-						int energyToReceive = this.energyStorage.receiveEnergy(this.energyStorage.getMaxReceive(), true);
-						int extractedEnergy = this.providers[face.ordinal()].extractEnergy(face.getOpposite(), energyToReceive, false);
-						this.energyStorage.receiveEnergy(extractedEnergy, false);
-					}
-				}*/
 			}
 		}
 	}
 
 	public void updateNeighbors() {
+		if(!this.neighborsDirty)
+			return;
+		
 		if(!this.worldObj.isRemote) {
 			for(EnumFacing face : EnumFacing.values())
 			{
@@ -204,15 +185,20 @@ public class TileEntityEnergyAccumulator extends TileEntity implements IEnergyRe
 				} else {
 					this.receivers[face.ordinal()] = null;
 				}
-				
-				if(entity instanceof IEnergyProvider && this.faceMode[face.ordinal()] == EnumFaceMode.INPUT) {
-					this.providers[face.ordinal()] = ((IEnergyProvider)entity);
-				} else {
-					this.providers[face.ordinal()] = null;
-				}
 			}
 		}
 		
 		this.neighborsDirty = false;
+	}
+	
+	@Override
+	public void invalidate() {
+		super.invalidate();
+		this.invalidateNeighbors();
+	}
+	
+	public void invalidateNeighbors()
+	{
+		this.neighborsDirty = true;
 	}
 }

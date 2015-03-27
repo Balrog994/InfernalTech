@@ -110,7 +110,16 @@ public class BlockEnergyAccumulator extends InfernalTechBlock {
 		TileEntity tileEntity = worldIn.getTileEntity(pos);
 		if(tileEntity instanceof TileEntityEnergyAccumulator) {
 			TileEntityEnergyAccumulator energyAccumulator = (TileEntityEnergyAccumulator)tileEntity;
-			energyAccumulator.updateNeighbors();
+			energyAccumulator.invalidateNeighbors();
+		}
+	}
+	
+	@Override
+	public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
+		TileEntity tileEntity = world.getTileEntity(pos);
+		if(tileEntity instanceof TileEntityEnergyAccumulator) {
+			TileEntityEnergyAccumulator energyAccumulator = (TileEntityEnergyAccumulator)tileEntity;
+			energyAccumulator.invalidateNeighbors();
 		}
 	}
 	

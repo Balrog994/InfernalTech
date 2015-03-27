@@ -26,15 +26,15 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityLockable;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.world.World;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.common.FMLLog;
 
-public class TileEntityEnergyChannel extends TileEntity implements IEnergyReceiver, IEnergyProvider, IEnergyChannel, IPersistable, IUpdatePlayerListBox, IToolHarvestable {
+public class TileEntityEnergyChannel extends TileEntity implements IEnergyChannel, IPersistable, IToolHarvestable, IUpdatePlayerListBox {
 
 	private IBlockState state;
 	private EnergyStorage energyStorage = new EnergyStorage(640, 640, 640);
 	private IEnergyReceiver[] receivers = new IEnergyReceiver[6];
-	private IEnergyProvider[] providers = new IEnergyProvider[6];
 	private List<IEnergyChannel> channels = Lists.newArrayList();
 	private boolean[] connections = new boolean[6];
 	private boolean neighborsDirty = true;
@@ -108,12 +108,10 @@ public class TileEntityEnergyChannel extends TileEntity implements IEnergyReceiv
 	public void update() {
 		if(!this.worldObj.isRemote)
 		{
-			this.updateNetwork();
+			this.updateNetwork(this.worldObj);
+			this.updateNeighbors(this.worldObj);
 			
-			if(this.neighborsDirty )
-				this.updateNeighbors();
-			
-			for(EnumFacing face : EnumFacing.values())
+			/*for(EnumFacing face : EnumFacing.values())
 			{
 				IEnergyReceiver receiver = this.receivers[face.ordinal()];
 				
@@ -134,31 +132,35 @@ public class TileEntityEnergyChannel extends TileEntity implements IEnergyReceiv
 					}
 				}
 				
-				/*if(this.providers[face.ordinal()] != null) {
+				if(this.providers[face.ordinal()] != null) {
 					int energyToReceive = this.energyStorage.receiveEnergy(this.energyStorage.getMaxReceive(), true);
 					int extractedEnergy = this.providers[face.ordinal()].extractEnergy(face.getOpposite(), energyToReceive, false);
 					this.energyStorage.receiveEnergy(extractedEnergy, false);
-				}*/
-			}
+				}
+			}*/
 		}
 	}
 
-	private void updateNetwork() {
+	private void updateNetwork(World world) {
 		if(this.getNetwork() != null)
 			return;
 		
-		if(this.attachToAdjacentNetworkIfUnique())
+		FMLLog.info("Updating Network");
+		
+		if(this.attachToAdjacentNetworkIfUnique(world))
 			return;
 		
-		EnergyNetwork network = new EnergyNetwork();
-		network.init(this);
+		FMLLog.info("Initializing New Network");
 		
-		if(getNetwork() != null && !this.worldObj.isRemote) {
-			this.worldObj.notifyNeighborsOfStateChange(this.pos, getBlockType());
+		EnergyNetwork network = new EnergyNetwork();
+		network.init(world, this);
+		
+		if(getNetwork() != null && !world.isRemote) {
+			world.notifyNeighborsOfStateChange(this.pos, getBlockType());
 		}
 	}
 
-	private boolean attachToAdjacentNetworkIfUnique() {
+	private boolean attachToAdjacentNetworkIfUnique(World world) {
 		EnergyNetwork network = null;
 		for(IEnergyChannel channel : this.channels) {
 			if(network == null)
@@ -171,12 +173,17 @@ public class TileEntityEnergyChannel extends TileEntity implements IEnergyReceiv
 			return false;
 		
 		network.addChannel(this);
-		network.invalidate();
-		return true;
+		network.invalidate(world);
+		
+		FMLLog.info("Attached to existing network");
+		return true; 
 	}
 
-	public void updateNeighbors() {
-		if(!this.worldObj.isRemote) {
+	public void updateNeighbors(World world) {
+		if(!this.neighborsDirty)
+			return;
+		
+		if(!world.isRemote) {
 			FMLLog.info("Updating Neighbors");
 			
 			boolean[] oldConnections = this.connections.clone();
@@ -185,27 +192,28 @@ public class TileEntityEnergyChannel extends TileEntity implements IEnergyReceiv
 			for(EnumFacing face : EnumFacing.values())
 			{
 				BlockPos blockPos = this.pos.offset(face);
-				TileEntity entity = this.worldObj.getTileEntity(blockPos);
+				TileEntity entity = world.getTileEntity(blockPos);
 				boolean connected = false;
 				
 				if(entity instanceof IEnergyChannel) {
 					this.channels.add((IEnergyChannel)entity);
+					
+					this.notifyReceiverRemoved(face);
 					this.receivers[face.ordinal()] = null;
-					this.providers[face.ordinal()] = null;
 					connected = true;
 				} else {
 					if(entity instanceof IEnergyReceiver) {
-						this.receivers[face.ordinal()] = ((IEnergyReceiver)entity);
+						IEnergyReceiver receiver = (IEnergyReceiver)entity;
+						
+						if(this.receivers[face.ordinal()] != receiver) {
+							this.notifyReceiverRemoved(face);
+							this.notifyReceiverAdded(receiver, face);
+						}
+						this.receivers[face.ordinal()] = receiver;
 						connected = true;
 					} else {
+						this.notifyReceiverRemoved(face);						
 						this.receivers[face.ordinal()] = null;
-					}
-					
-					if(entity instanceof IEnergyProvider) {
-						this.providers[face.ordinal()] = ((IEnergyProvider)entity);
-						connected = true;
-					} else {
-						this.providers[face.ordinal()] = null;
 					}
 				}
 				
@@ -215,13 +223,25 @@ public class TileEntityEnergyChannel extends TileEntity implements IEnergyReceiv
 			if(!Arrays.equals(this.connections, oldConnections)) {
 			
 				this.state = null;
-				this.worldObj.markBlockForUpdate(this.pos);
+				world.markBlockForUpdate(this.pos);
 			}
 		} else {		
 			this.markDirty();
 		}
 		
 		this.neighborsDirty = false;
+	}
+	
+	private void notifyReceiverRemoved(EnumFacing face)
+	{
+		if(this.receivers[face.ordinal()] != null && this.energyNetwork != null)
+			this.energyNetwork.removeReceiver(this.pos.offset(face));
+	}
+	
+	private void notifyReceiverAdded(IEnergyReceiver receiver, EnumFacing face)
+	{
+		if(this.energyNetwork != null)
+			this.energyNetwork.addReceiver(receiver, face, this);
 	}
 	
 	public Packet getDescriptionPacket() {
@@ -269,17 +289,89 @@ public class TileEntityEnergyChannel extends TileEntity implements IEnergyReceiv
 
 	@Override
 	public boolean registerToNetwork(EnergyNetwork energyNetwork) {
+		FMLLog.info("Registered to Network");
 		this.energyNetwork = energyNetwork;
 		return true;
 	}
 
 	@Override
-	public List<IEnergyChannel> getConnectedChannels() {
-		return this.channels;
+	public List<IEnergyChannel> getConnectedChannels(World world) {
+		List<IEnergyChannel> channels = Lists.newArrayList();
+		
+		for(EnumFacing face : EnumFacing.values())
+		{
+			BlockPos blockPos = this.pos.offset(face);
+			TileEntity entity = world.getTileEntity(blockPos);
+			
+			if(entity instanceof IEnergyChannel) {
+				channels.add((IEnergyChannel)entity);
+			}
+		}
+		
+		return channels;
 	}
 
 	@Override
 	public EnergyNetwork getNetwork() {
 		return this.energyNetwork;
+	}
+
+	@Override
+	public BlockPos getPosition() {
+		return this.pos;
+	}
+
+	@Override
+	public IEnergyReceiver getReceiver(EnumFacing face) {
+		return this.receivers[face.ordinal()];
+	}
+
+	@Override
+	public int getMaxEnergyStored() {
+		return this.energyStorage.getMaxEnergyStored();
+	}
+
+	@Override
+	public int getEnergyStored() {
+		return this.energyStorage.getEnergyStored();
+	}
+
+	@Override
+	public int getMaxExtract(EnumFacing face) {
+		return this.energyStorage.getMaxExtract();
+	}
+
+	@Override
+	public void setEnergyStorage(int energy) {
+		this.energyStorage.setEnergyStored(energy);
+	}
+
+	public void onBreakBlock(World worldIn) {
+		FMLLog.info("onBreakBlock in TileEntity");
+		
+		for(IEnergyChannel channel : this.channels) {
+			channel.removeChannelConnection(this);
+			channel.invalidate();
+		}
+		this.channels.clear();
+		this.receivers = new IEnergyReceiver[6];
+		
+		EnergyNetwork network = this.getNetwork();
+		if(network != null)
+			network.destroy();
+		
+		this.invalidate();
+	}
+	
+	@Override
+	public void invalidate() {
+		super.invalidate();
+		this.invalidateNeighbors();
+	}
+
+	@Override
+	public void removeChannelConnection(IEnergyChannel channel) {
+		this.channels.remove(channel);
+		this.invalidate();
 	}
 }
