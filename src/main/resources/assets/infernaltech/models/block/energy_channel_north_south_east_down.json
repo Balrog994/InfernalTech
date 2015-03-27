@@ -1,27 +1,27 @@
 {
   "textures": {
-    "channel": "infernaltech:blocks/channel_energy_bundled"
+    "channel": "infernaltech:blocks/channel_new"
   },
   "elements": [
     {
       "type": "cube",
       "from": [
-        6,
-        6,
-        6
+        5,
+        5,
+        5
       ],
       "to": [
-        10,
-        10,
-        10
+        11,
+        11,
+        11
       ],
       "faces": {
         "down": {
           "uv": [
-            0,
-            0,
-            8,
-            8
+            5,
+            5,
+            11,
+            11
           ],
           "textureFacing": "down",
           "cull": false,
@@ -29,10 +29,10 @@
         },
         "up": {
           "uv": [
-            0,
-            0,
-            8,
-            8
+            5,
+            11,
+            11,
+            5
           ],
           "textureFacing": "up",
           "cull": false,
@@ -40,10 +40,10 @@
         },
         "north": {
           "uv": [
-            0,
-            0,
-            8,
-            8
+            11,
+            5,
+            5,
+            11
           ],
           "textureFacing": "north",
           "cull": false,
@@ -51,10 +51,10 @@
         },
         "south": {
           "uv": [
-            0,
-            0,
-            8,
-            8
+            5,
+            5,
+            11,
+            11
           ],
           "textureFacing": "south",
           "cull": false,
@@ -62,10 +62,10 @@
         },
         "west": {
           "uv": [
-            0,
-            0,
-            8,
-            8
+            5,
+            5,
+            11,
+            11
           ],
           "textureFacing": "west",
           "cull": false,
@@ -73,10 +73,10 @@
         },
         "east": {
           "uv": [
-            0,
-            0,
-            8,
-            8
+            11,
+            11,
+            5,
+            5
           ],
           "textureFacing": "east",
           "cull": false,
@@ -87,19 +87,19 @@
     {
       "type": "cube",
       "from": [
-        7,
-        7,
+        5,
+        5,
         0
       ],
       "to": [
-        9,
-        9,
-        10
+        11,
+        11,
+        5
       ],
       "faces": {
         "down": {
           "uv": [
-            0,
+            5,
             11,
             11,
             16
@@ -110,10 +110,10 @@
         },
         "up": {
           "uv": [
-            0,
+            5,
+            16,
             11,
-            11,
-            16
+            11
           ],
           "textureFacing": "up",
           "cull": false,
@@ -121,10 +121,10 @@
         },
         "north": {
           "uv": [
-            0,
+            5,
+            5,
             11,
-            11,
-            16
+            11
           ],
           "textureFacing": "north",
           "cull": false,
@@ -132,10 +132,10 @@
         },
         "south": {
           "uv": [
-            0,
+            5,
+            5,
             11,
-            11,
-            16
+            11
           ],
           "textureFacing": "south",
           "cull": false,
@@ -143,10 +143,10 @@
         },
         "west": {
           "uv": [
-            0,
+            16,
+            5,
             11,
-            11,
-            16
+            11
           ],
           "textureFacing": "west",
           "cull": false,
@@ -154,10 +154,10 @@
         },
         "east": {
           "uv": [
-            0,
             11,
-            11,
-            16
+            5,
+            16,
+            11
           ],
           "textureFacing": "east",
           "cull": false,
@@ -168,22 +168,22 @@
     {
       "type": "cube",
       "from": [
-        7,
-        7,
-        10
+        5,
+        5,
+        11
       ],
       "to": [
-        9,
-        9,
+        11,
+        11,
         16
       ],
       "faces": {
         "down": {
           "uv": [
-            0,
             11,
-            11,
-            16
+            16,
+            5,
+            11
           ],
           "textureFacing": "down",
           "cull": false,
@@ -191,7 +191,7 @@
         },
         "up": {
           "uv": [
-            0,
+            5,
             11,
             11,
             16
@@ -202,10 +202,10 @@
         },
         "north": {
           "uv": [
-            0,
+            5,
+            5,
             11,
-            11,
-            16
+            11
           ],
           "textureFacing": "north",
           "cull": false,
@@ -213,10 +213,10 @@
         },
         "south": {
           "uv": [
-            0,
+            5,
+            5,
             11,
-            11,
-            16
+            11
           ],
           "textureFacing": "south",
           "cull": false,
@@ -224,10 +224,10 @@
         },
         "west": {
           "uv": [
-            0,
             11,
-            11,
-            16
+            5,
+            16,
+            11
           ],
           "textureFacing": "west",
           "cull": false,
@@ -235,10 +235,10 @@
         },
         "east": {
           "uv": [
-            0,
+            16,
+            5,
             11,
-            11,
-            16
+            11
           ],
           "textureFacing": "east",
           "cull": false,
@@ -249,22 +249,22 @@
     {
       "type": "cube",
       "from": [
-        10,
-        7,
-        7
+        11,
+        5,
+        5
       ],
       "to": [
         16,
-        9,
-        9
+        11,
+        11
       ],
       "faces": {
         "down": {
           "uv": [
-            0,
             11,
-            11,
-            16
+            5,
+            16,
+            11
           ],
           "textureFacing": "down",
           "cull": false,
@@ -272,10 +272,10 @@
         },
         "up": {
           "uv": [
-            0,
             11,
             11,
-            16
+            16,
+            5
           ],
           "textureFacing": "up",
           "cull": false,
@@ -283,10 +283,10 @@
         },
         "north": {
           "uv": [
-            0,
+            16,
+            5,
             11,
-            11,
-            16
+            11
           ],
           "textureFacing": "north",
           "cull": false,
@@ -294,10 +294,10 @@
         },
         "south": {
           "uv": [
-            0,
             11,
-            11,
-            16
+            5,
+            16,
+            11
           ],
           "textureFacing": "south",
           "cull": false,
@@ -305,10 +305,10 @@
         },
         "west": {
           "uv": [
-            0,
             11,
-            11,
-            16
+            5,
+            16,
+            11
           ],
           "textureFacing": "west",
           "cull": false,
@@ -316,10 +316,10 @@
         },
         "east": {
           "uv": [
-            0,
+            16,
             11,
             11,
-            16
+            5
           ],
           "textureFacing": "east",
           "cull": false,
@@ -330,21 +330,21 @@
     {
       "type": "cube",
       "from": [
-        7,
+        5,
         0,
-        7
+        5
       ],
       "to": [
-        9,
-        6,
-        9
+        11,
+        5,
+        11
       ],
       "faces": {
         "down": {
           "uv": [
+            5,
+            5,
             11,
-            0,
-            16,
             11
           ],
           "textureFacing": "down",
@@ -353,9 +353,9 @@
         },
         "up": {
           "uv": [
+            5,
+            5,
             11,
-            0,
-            16,
             11
           ],
           "textureFacing": "up",
@@ -364,10 +364,10 @@
         },
         "north": {
           "uv": [
+            5,
             11,
-            0,
-            16,
-            11
+            11,
+            16
           ],
           "textureFacing": "north",
           "cull": false,
@@ -375,10 +375,10 @@
         },
         "south": {
           "uv": [
+            5,
             11,
-            0,
-            16,
-            11
+            11,
+            16
           ],
           "textureFacing": "south",
           "cull": false,
@@ -386,10 +386,10 @@
         },
         "west": {
           "uv": [
+            5,
             11,
-            0,
-            16,
-            11
+            11,
+            16
           ],
           "textureFacing": "west",
           "cull": false,
@@ -397,10 +397,10 @@
         },
         "east": {
           "uv": [
+            5,
             11,
-            0,
-            16,
-            11
+            11,
+            16
           ],
           "textureFacing": "east",
           "cull": false,

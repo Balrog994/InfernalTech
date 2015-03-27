@@ -38,7 +38,7 @@ public class TileEntityEnergyChannel extends TileEntity implements IEnergyChanne
 	private List<IEnergyChannel> channels = Lists.newArrayList();
 	private boolean[] connections = new boolean[6];
 	private boolean neighborsDirty = true;
-	private EnergyNetwork energyNetwork;
+	private EnergyNetwork energyNetwork = null;
 	
 	@Override
 	public boolean canConnectEnergy(EnumFacing from) {
@@ -110,34 +110,6 @@ public class TileEntityEnergyChannel extends TileEntity implements IEnergyChanne
 		{
 			this.updateNetwork(this.worldObj);
 			this.updateNeighbors(this.worldObj);
-			
-			/*for(EnumFacing face : EnumFacing.values())
-			{
-				IEnergyReceiver receiver = this.receivers[face.ordinal()];
-				
-				if(receiver != null) {
-					int energyToSend = this.energyStorage.extractEnergy(this.energyStorage.getMaxExtract(), true);
-					if(energyToSend > 0)
-					{
-						int receivedEnergy = receiver.receiveEnergy(face.getOpposite(), energyToSend, true);
-						if(receivedEnergy > 0) {
-							int effectiveExtractedEnergy = this.energyStorage.extractEnergy(receivedEnergy, false);
-							int effectiveInsertedEnergy = receiver.receiveEnergy(face.getOpposite(), effectiveExtractedEnergy, false);
-							if(effectiveInsertedEnergy < effectiveExtractedEnergy)
-								FMLLog.info("Inserted %d RF, Extracted %d RF", effectiveInsertedEnergy, effectiveExtractedEnergy);
-							
-							if(effectiveInsertedEnergy > 0)
-								FMLLog.info("Sent %d RF to %s", effectiveInsertedEnergy, face.toString());
-						}
-					}
-				}
-				
-				if(this.providers[face.ordinal()] != null) {
-					int energyToReceive = this.energyStorage.receiveEnergy(this.energyStorage.getMaxReceive(), true);
-					int extractedEnergy = this.providers[face.ordinal()].extractEnergy(face.getOpposite(), energyToReceive, false);
-					this.energyStorage.receiveEnergy(extractedEnergy, false);
-				}
-			}*/
 		}
 	}
 
@@ -145,12 +117,12 @@ public class TileEntityEnergyChannel extends TileEntity implements IEnergyChanne
 		if(this.getNetwork() != null)
 			return;
 		
-		FMLLog.info("Updating Network");
+		FMLLog.info("Updating Network (%s)", this.pos.toString());
 		
 		if(this.attachToAdjacentNetworkIfUnique(world))
 			return;
 		
-		FMLLog.info("Initializing New Network");
+		FMLLog.info("Initializing New Network (%s)", this.pos.toString());
 		
 		EnergyNetwork network = new EnergyNetwork();
 		network.init(world, this);
@@ -162,7 +134,8 @@ public class TileEntityEnergyChannel extends TileEntity implements IEnergyChanne
 
 	private boolean attachToAdjacentNetworkIfUnique(World world) {
 		EnergyNetwork network = null;
-		for(IEnergyChannel channel : this.channels) {
+		List<IEnergyChannel> nearChannels = this.getConnectedChannels(world);
+		for(IEnergyChannel channel : nearChannels) {
 			if(network == null)
 				network = channel.getNetwork();
 			else if(network != channel.getNetwork())
@@ -184,9 +157,6 @@ public class TileEntityEnergyChannel extends TileEntity implements IEnergyChanne
 			return;
 		
 		if(!world.isRemote) {
-			FMLLog.info("Updating Neighbors");
-			
-			boolean[] oldConnections = this.connections.clone();
 			this.channels.clear();
 			
 			for(EnumFacing face : EnumFacing.values())
@@ -220,11 +190,8 @@ public class TileEntityEnergyChannel extends TileEntity implements IEnergyChanne
 				this.connections[face.ordinal()] = connected;
 			}
 			
-			if(!Arrays.equals(this.connections, oldConnections)) {
-			
-				this.state = null;
-				world.markBlockForUpdate(this.pos);
-			}
+			this.state = null;
+			world.markBlockForUpdate(this.pos);
 		} else {		
 			this.markDirty();
 		}
@@ -254,7 +221,7 @@ public class TileEntityEnergyChannel extends TileEntity implements IEnergyChanne
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
 		NBTTagCompound tagCompound = pkt.getNbtCompound();
 		readFromNBT(tagCompound);
-				
+
 		this.state = null;
 		this.worldObj.markBlockForUpdate(this.pos);
 	}
@@ -289,7 +256,11 @@ public class TileEntityEnergyChannel extends TileEntity implements IEnergyChanne
 
 	@Override
 	public boolean registerToNetwork(EnergyNetwork energyNetwork) {
-		FMLLog.info("Registered to Network");
+		if(energyNetwork == null)
+			FMLLog.info("Unregistered from Network (%s)", this.pos.toString());
+		else
+			FMLLog.info("Registered to Network (%s)", this.pos.toString());
+		
 		this.energyNetwork = energyNetwork;
 		return true;
 	}
@@ -347,6 +318,9 @@ public class TileEntityEnergyChannel extends TileEntity implements IEnergyChanne
 	}
 
 	public void onBreakBlock(World worldIn) {
+		if(worldIn.isRemote)
+			return;
+		
 		FMLLog.info("onBreakBlock in TileEntity");
 		
 		for(IEnergyChannel channel : this.channels) {
@@ -359,8 +333,6 @@ public class TileEntityEnergyChannel extends TileEntity implements IEnergyChanne
 		EnergyNetwork network = this.getNetwork();
 		if(network != null)
 			network.destroy();
-		
-		this.invalidate();
 	}
 	
 	@Override
@@ -372,6 +344,5 @@ public class TileEntityEnergyChannel extends TileEntity implements IEnergyChanne
 	@Override
 	public void removeChannelConnection(IEnergyChannel channel) {
 		this.channels.remove(channel);
-		this.invalidate();
 	}
 }

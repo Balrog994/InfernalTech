@@ -53,7 +53,7 @@ public class EnergyNetwork {
 		if(this.energyChannels.contains(channel))
 			return;
 		
-		FMLLog.info("Adding Channel to Network (%s)", channel.getPosition().toString());
+		//FMLLog.info("Adding Channel to Network (%s)", channel.getPosition().toString());
 		
 		if(this.energyChannels.isEmpty())
 			EnergyNetworkHandler.instance.registerNetwork(this);
