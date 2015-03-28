@@ -75,7 +75,6 @@ public class BlockMolecularSeparator extends InfernalTechBlock {
 				.withProperty(FACING, EnumFacing.NORTH)
 		);
 		
-		this.setLightOpacity(0);
 		this.setUnlocalizedName(BlockMolecularSeparator.UnlocalizedName);
 		this.setCreativeTab(CreativeTabs.tabBlock);
 		this.setHardness(10.0f);
@@ -156,12 +155,12 @@ public class BlockMolecularSeparator extends InfernalTechBlock {
 	
 	@Override
 	public boolean isOpaqueCube() {
-		return false;
+		return true;
 	}
 	
 	@Override
 	public boolean isFullCube() {
-		return false;
+		return true;
 	}
 	
 	@Override

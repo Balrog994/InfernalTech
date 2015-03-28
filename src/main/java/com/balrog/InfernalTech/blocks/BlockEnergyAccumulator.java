@@ -52,10 +52,10 @@ public class BlockEnergyAccumulator extends InfernalTechBlock {
 
 		this.setDefaultState(this.getDefaultState().withProperty(TIER, 0));
 		
-		this.setLightOpacity(0);
 		this.setUnlocalizedName(BlockEnergyAccumulator.UnlocalizedName);
 		this.setCreativeTab(CreativeTabs.tabBlock);
 		this.setHardness(10.0f);
+		this.setLightLevel(1.0f);
 	}
 	
 	public static void init(CommonProxy proxy)
@@ -97,12 +97,12 @@ public class BlockEnergyAccumulator extends InfernalTechBlock {
 	
 	@Override
 	public boolean isOpaqueCube() {
-		return false;
+		return true;
 	}
 	
 	@Override
 	public boolean isFullCube() {
-		return false;
+		return true;
 	}
 	
 	@Override
