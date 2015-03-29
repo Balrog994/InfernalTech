@@ -7,6 +7,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -46,4 +48,16 @@ public class ClientProxy extends CommonProxy {
 			GameRegistry.registerTileEntity(tileEntityClass, id);
 	}
 
+	@Override
+	public double getReachDistanceForPlayer(EntityPlayer entityPlayer) {
+		if(entityPlayer instanceof EntityPlayerMP) {
+			return ((EntityPlayerMP) entityPlayer).theItemInWorldManager.getBlockReachDistance();
+	    }
+		return super.getReachDistanceForPlayer(entityPlayer);
+	}
+	
+	@Override
+	public EntityPlayer getClientPlayer() {
+	    return Minecraft.getMinecraft().thePlayer;
+	}
 }

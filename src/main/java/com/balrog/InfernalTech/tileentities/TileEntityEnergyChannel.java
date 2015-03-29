@@ -1,12 +1,16 @@
 package com.balrog.InfernalTech.tileentities;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import com.balrog.InfernalTech.blocks.BlockEnergyChannel;
 import com.balrog.InfernalTech.energy.EnergyNetwork;
 import com.balrog.InfernalTech.energy.IEnergyChannel;
 import com.balrog.InfernalTech.enums.EnumFaceMode;
+import com.balrog.InfernalTech.utils.Collidable;
+import com.balrog.InfernalTech.utils.ICollidable;
 import com.google.common.collect.Lists;
 
 import cofh.api.energy.EnergyStorage;
@@ -24,6 +28,7 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityLockable;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
@@ -333,5 +338,60 @@ public class TileEntityEnergyChannel extends TileEntity implements IEnergyChanne
 	public void removeChannelConnection(World world, IEnergyChannel channel) {
 		this.channels.remove(channel);
 		world.markBlockForUpdate(channel.getPosition());
+	}
+
+	@Override
+	public Collection<? extends ICollidable> getCollidableComponents() {
+		List<ICollidable> collidables = Lists.newArrayList();
+		
+		collidables.add(new Collidable(new AxisAlignedBB(5.0/16.0, 5.0/16.0, 5.0/16.0, 11.0/16.0, 11.0/16.0, 11.0/16.0)));
+		
+		for(EnumFacing face : EnumFacing.values()) {
+			Collection<ICollidable> collidablesForFace = getCollidables(face);
+			if(collidablesForFace != null)
+				collidables.addAll(collidablesForFace);
+		}
+		
+		return collidables;
+	}
+
+	private Collection<ICollidable> getCollidables(EnumFacing face) {
+		if(hasConnection(face)) {
+			double minX = 0, minY = 0, minZ = 0;
+			double maxX = 16, maxY = 16, maxZ = 16;
+			
+			switch(face) {
+			case DOWN:
+				minX = 5; minY = 0; minZ = 5;
+				maxX = 11; maxY = 5; maxZ = 11;
+				break;
+			case EAST:
+				minX = 11; minY = 5; minZ = 5;
+				maxX = 16; maxY = 11; maxZ = 11;
+				break;
+			case NORTH:
+				minX = 5; minY = 5; minZ = 0;
+				maxX = 11; maxY = 11; maxZ = 5;
+				break;
+			case SOUTH:
+				minX = 5; minY = 5; minZ = 11;
+				maxX = 11; maxY = 11; maxZ = 16;
+				break;
+			case UP:
+				minX = 5; minY = 11; minZ = 5;
+				maxX = 11; maxY = 16; maxZ = 11;
+				break;
+			case WEST:
+				minX = 0; minY = 5; minZ = 5;
+				maxX = 5; maxY = 11; maxZ = 11;
+				break;
+			default:
+				break;
+				
+			}
+			
+			return Collections.singletonList((ICollidable)new Collidable(new AxisAlignedBB(minX / 16.0, minY / 16.0, minZ / 16.0, maxX / 16.0, maxY / 16.0, maxZ / 16.0)));
+		}
+		return null;
 	}
 }

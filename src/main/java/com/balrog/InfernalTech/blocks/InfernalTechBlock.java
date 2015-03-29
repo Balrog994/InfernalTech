@@ -69,10 +69,11 @@ public abstract class InfernalTechBlock extends BlockContainer {
         	} else {
         		if(this.hasGui()) {
         			playerIn.openGui(InfernalTech.instance, this.getGuiId(), worldIn, pos.getX(), pos.getY(), pos.getZ());
+        			return true;
         		}
         	}
 
-            return true;
+            return false;
         }
     }
 	

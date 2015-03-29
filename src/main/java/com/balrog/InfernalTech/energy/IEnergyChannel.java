@@ -1,6 +1,9 @@
 package com.balrog.InfernalTech.energy;
 
+import java.util.Collection;
 import java.util.List;
+
+import com.balrog.InfernalTech.utils.ICollidable;
 
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
@@ -29,5 +32,7 @@ public interface IEnergyChannel extends IEnergyHandler {
 	void setEnergyStorage(int energy);
 
 	void removeChannelConnection(World world, IEnergyChannel channel);
+
+	Collection<? extends ICollidable> getCollidableComponents();
 
 }
