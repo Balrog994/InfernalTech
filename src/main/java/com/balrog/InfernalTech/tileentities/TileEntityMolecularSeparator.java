@@ -7,6 +7,7 @@ import cofh.api.energy.IEnergyStorage;
 import com.balrog.InfernalTech.containers.ContainerMolecularSeparator;
 import com.balrog.InfernalTech.enums.EnumFaceMode;
 import com.balrog.InfernalTech.materials.ItemCoalPowder;
+import com.balrog.InfernalTech.network.PacketHandler;
 import com.balrog.InfernalTech.recipes.MolecularSeparatorRecipe;
 import com.balrog.InfernalTech.recipes.MolecularSeparatorRecipes;
 
@@ -20,6 +21,9 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityLockable;
@@ -361,6 +365,8 @@ public class TileEntityMolecularSeparator extends TileEntityLockable implements 
 					}
 				}
 			}
+			
+			PacketHandler.sendToAllAround(new PacketPowerStorage(this), this);
 		}
 	}
 
@@ -447,7 +453,7 @@ public class TileEntityMolecularSeparator extends TileEntityLockable implements 
 		return true;
 	}
 
-		@Override
+	@Override
 	public boolean canConnectEnergy(EnumFacing from) {
 		return true;
 	}

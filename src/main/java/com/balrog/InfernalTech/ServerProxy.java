@@ -26,8 +26,7 @@ public class ServerProxy extends CommonProxy {
 	}
 
 	@Override
-	public void registerTileEntity(Class<? extends TileEntity> tileEntityClass,
-			String id, TileEntitySpecialRenderer specialRenderer) {
+	public void registerTileEntity(Class<? extends TileEntity> tileEntityClass, String id, Class<? extends TileEntitySpecialRenderer> specialRenderer) {
 		
 		GameRegistry.registerTileEntity(tileEntityClass, id);
 	}

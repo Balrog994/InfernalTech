@@ -69,7 +69,7 @@ public class BlockEnergyChannel extends InfernalTechBlock {
 		this.setHardness(10.0f);
 	}
 	
-	public static void init(CommonProxy proxy)
+	public static void init(CommonProxy proxy, boolean isServerSide)
 	{
 		GameRegistry.registerBlock(BlockEnergyChannel.instance, BlockEnergyChannel.ID);
 		proxy.registerTileEntity(TileEntityEnergyChannel.class, BlockEnergyChannel.ID + "TileEntity", null);

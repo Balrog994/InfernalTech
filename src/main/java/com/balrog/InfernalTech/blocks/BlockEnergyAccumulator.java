@@ -58,10 +58,14 @@ public class BlockEnergyAccumulator extends InfernalTechBlock {
 		this.setLightLevel(1.0f);
 	}
 	
-	public static void init(CommonProxy proxy)
+	public static void init(CommonProxy proxy, boolean isServerSide)
 	{
 		GameRegistry.registerBlock(BlockEnergyAccumulator.instance, ItemBlockEnergyAccumulator.class, BlockEnergyAccumulator.ID);
-		proxy.registerTileEntity(TileEntityEnergyAccumulator.class, BlockEnergyAccumulator.ID + "TileEntity", new TileEntityConfigurableSidesRenderer());
+		if(isServerSide) {
+			proxy.registerTileEntity(TileEntityEnergyAccumulator.class, BlockEnergyAccumulator.ID + "TileEntity", null);
+		} else {
+			proxy.registerTileEntity(TileEntityEnergyAccumulator.class, BlockEnergyAccumulator.ID + "TileEntity", TileEntityConfigurableSidesRenderer.class);
+		}		
 		
 		proxy.addModelBakeryVariant(Item.getItemFromBlock(BlockEnergyAccumulator.instance), InfernalTech.MODID.toLowerCase() + ":" + ID + ".tier0");
 		proxy.addModelBakeryVariant(Item.getItemFromBlock(BlockEnergyAccumulator.instance), InfernalTech.MODID.toLowerCase() + ":" + ID + ".tier1");

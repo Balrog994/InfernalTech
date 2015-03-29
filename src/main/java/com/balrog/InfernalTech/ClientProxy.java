@@ -40,12 +40,18 @@ public class ClientProxy extends CommonProxy {
 	}
 
 	@Override
-	public void registerTileEntity(Class<? extends TileEntity> tileEntityClass,
-			String id, TileEntitySpecialRenderer specialRenderer) {
-		if(specialRenderer != null)
-			ClientRegistry.registerTileEntity(tileEntityClass, id, specialRenderer);
-		else
-			GameRegistry.registerTileEntity(tileEntityClass, id);
+	public void registerTileEntity(Class<? extends TileEntity> tileEntityClass, String id, Class<? extends TileEntitySpecialRenderer> specialRenderer) {
+		try
+		{
+			if(specialRenderer != null)
+				ClientRegistry.registerTileEntity(tileEntityClass, id, specialRenderer.newInstance());
+			else
+				GameRegistry.registerTileEntity(tileEntityClass, id);
+		}
+		catch(Exception ex)
+		{
+			FMLLog.severe(ex.toString());
+		}
 	}
 
 	@Override

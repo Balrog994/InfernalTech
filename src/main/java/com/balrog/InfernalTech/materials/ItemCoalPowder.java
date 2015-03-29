@@ -30,7 +30,7 @@ public class ItemCoalPowder extends Item {
 		setCreativeTab(CreativeTabs.tabMaterials);
 	}
 	
-	public static void init(CommonProxy proxy)
+	public static void init(CommonProxy proxy, boolean isServerSide)
 	{
 		GameRegistry.registerItem(ItemCoalPowder.instance, ItemCoalPowder.UnlocalizedName);
 		proxy.registerInventoryModel(ItemCoalPowder.instance, ID, 0);

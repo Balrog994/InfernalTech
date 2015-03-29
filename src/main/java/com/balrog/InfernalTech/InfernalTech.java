@@ -16,6 +16,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.relauncher.Side;
 
 
 @Mod(modid = InfernalTech.MODID, version = InfernalTech.VERSION, name = "Infernal Tech")
@@ -43,14 +44,16 @@ public class InfernalTech {
     @EventHandler
     public void init(FMLInitializationEvent event)
     {
+    	boolean isServerSide = event.getSide() == Side.SERVER;
+    	
     	NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
     	MinecraftForge.EVENT_BUS.register(EnergyNetworkHandler.instance);
         FMLCommonHandler.instance().bus().register(EnergyNetworkHandler.instance);
     	
-    	BlockMolecularSeparator.init(proxy);
-    	BlockEnergyAccumulator.init(proxy);
-    	BlockEnergyChannel.init(proxy);
-    	ItemCoalPowder.init(proxy);
+    	BlockMolecularSeparator.init(proxy, isServerSide);
+    	BlockEnergyAccumulator.init(proxy, isServerSide);
+    	BlockEnergyChannel.init(proxy, isServerSide);
+    	ItemCoalPowder.init(proxy, isServerSide);
     }
     
     @EventHandler

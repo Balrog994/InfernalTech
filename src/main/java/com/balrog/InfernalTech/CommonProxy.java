@@ -1,5 +1,6 @@
 package com.balrog.InfernalTech;
 
+import com.balrog.InfernalTech.renderers.TileEntityConfigurableSidesRenderer;
 import com.balrog.InfernalTech.tileentities.TileEntityMolecularSeparator;
 
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -35,7 +36,7 @@ public abstract class CommonProxy {
 	public abstract void registerTileEntity(
 			Class<? extends TileEntity> tileEntityClass, 
 			String id, 
-			TileEntitySpecialRenderer specialRenderer);
+			Class<? extends TileEntitySpecialRenderer> specialRenderer);
 	
 	public double getReachDistanceForPlayer(EntityPlayer entityPlayer) {
 		return 5;

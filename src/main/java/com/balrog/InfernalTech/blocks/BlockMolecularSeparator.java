@@ -80,10 +80,14 @@ public class BlockMolecularSeparator extends InfernalTechBlock {
 		this.setHardness(10.0f);
 	}
 	
-	public static void init(CommonProxy proxy)
+	public static void init(CommonProxy proxy, boolean isServerSide)
 	{
 		GameRegistry.registerBlock(BlockMolecularSeparator.instance, BlockMolecularSeparator.ID);
-		proxy.registerTileEntity(TileEntityMolecularSeparator.class, BlockMolecularSeparator.ID + "TileEntity", new TileEntityConfigurableSidesRenderer());
+		if(isServerSide) {
+			proxy.registerTileEntity(TileEntityMolecularSeparator.class, BlockMolecularSeparator.ID + "TileEntity", null);
+		} else {
+			proxy.registerTileEntity(TileEntityMolecularSeparator.class, BlockMolecularSeparator.ID + "TileEntity", TileEntityConfigurableSidesRenderer.class);
+		}
 		proxy.registerInventoryModel(Item.getItemFromBlock(BlockMolecularSeparator.instance), ID, 0);
 	}
 	
