@@ -229,6 +229,8 @@ public class TileEntityEnergyChannel extends TileEntity implements IEnergyChanne
 	
 	@Override
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
+		FMLLog.info("Energy Channel Updating");
+		
 		NBTTagCompound tagCompound = pkt.getNbtCompound();
 		readFromNBT(tagCompound);
 

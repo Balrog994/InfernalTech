@@ -1,5 +1,9 @@
 package com.balrog.InfernalTech.containers;
 
+import com.balrog.InfernalTech.network.PacketHandler;
+import com.balrog.InfernalTech.network.PacketPowerStorage;
+import com.balrog.InfernalTech.tileentities.TileEntityMolecularSeparator;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -9,18 +13,19 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotFurnaceOutput;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
+import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerMolecularSeparator extends Container {
 
-	private IInventory tileMolecularSeparator;
+	private TileEntityMolecularSeparator tileMolecularSeparator;
 	private int cookTime;
 	private int operationProgressTime;
 	private int totalEnergyStorage;
 	private int totalCookTime;
 	
-	public ContainerMolecularSeparator(InventoryPlayer playerInventory, IInventory molecularSeparator) {
+	public ContainerMolecularSeparator(InventoryPlayer playerInventory, TileEntityMolecularSeparator molecularSeparator) {
 		this.tileMolecularSeparator = molecularSeparator;
 		this.addSlotToContainer(new Slot(molecularSeparator, 0, 56, 34));
 		this.addSlotToContainer(new SlotFurnaceOutput(playerInventory.player, molecularSeparator, 1, 116, 35));
@@ -60,21 +65,25 @@ public class ContainerMolecularSeparator extends Container {
 
             if (this.cookTime != this.tileMolecularSeparator.getField(2))
             {
+            	FMLLog.info("Sending Packet %d,%d", 2, this.tileMolecularSeparator.getField(2));
                 icrafting.sendProgressBarUpdate(this, 2, this.tileMolecularSeparator.getField(2));
             }
 
-            if (this.totalEnergyStorage != this.tileMolecularSeparator.getField(0))
+            /*if (this.totalEnergyStorage != this.tileMolecularSeparator.getField(0))
             {
+            	FMLLog.info("Sending Packet %d,%d", 0, this.tileMolecularSeparator.getField(0));
                 icrafting.sendProgressBarUpdate(this, 0, this.tileMolecularSeparator.getField(0));
-            }
+            }*/
 
             if (this.operationProgressTime != this.tileMolecularSeparator.getField(1))
             {
+            	FMLLog.info("Sending Packet %d,%d", 1, this.tileMolecularSeparator.getField(1));
                 icrafting.sendProgressBarUpdate(this, 1, this.tileMolecularSeparator.getField(1));
             }
 
             if (this.totalCookTime != this.tileMolecularSeparator.getField(3))
             {
+            	FMLLog.info("Sending Packet %d,%d", 3, this.tileMolecularSeparator.getField(3));
                 icrafting.sendProgressBarUpdate(this, 3, this.tileMolecularSeparator.getField(3));
             }
         }
@@ -83,11 +92,15 @@ public class ContainerMolecularSeparator extends Container {
         this.totalEnergyStorage = this.tileMolecularSeparator.getField(0);
         this.operationProgressTime = this.tileMolecularSeparator.getField(1);
         this.totalCookTime = this.tileMolecularSeparator.getField(3);
+        
+        //PacketHandler.sendToAllAround(new PacketPowerStorage(this.tileMolecularSeparator), this.tileMolecularSeparator);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void updateProgressBar(int id, int data) {
+		FMLLog.info("Received Packet %d,%d", id, data);
+		
 		this.tileMolecularSeparator.setField(id, data);
 	}
 	
@@ -161,5 +174,4 @@ public class ContainerMolecularSeparator extends Container {
 
         return itemstack;
 	}
-
 }

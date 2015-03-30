@@ -5,6 +5,8 @@ import com.balrog.InfernalTech.blocks.BlockEnergyChannel;
 import com.balrog.InfernalTech.blocks.BlockMolecularSeparator;
 import com.balrog.InfernalTech.energy.EnergyNetworkHandler;
 import com.balrog.InfernalTech.materials.ItemCoalPowder;
+import com.balrog.InfernalTech.network.PacketHandler;
+import com.balrog.InfernalTech.network.PacketPowerStorage;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -45,6 +47,8 @@ public class InfernalTech {
     public void init(FMLInitializationEvent event)
     {
     	boolean isServerSide = event.getSide() == Side.SERVER;
+    	
+    	PacketHandler.INSTANCE.registerMessage(new PacketPowerStorage(), PacketPowerStorage.class, PacketHandler.nextID(), Side.CLIENT);
     	
     	NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
     	MinecraftForge.EVENT_BUS.register(EnergyNetworkHandler.instance);

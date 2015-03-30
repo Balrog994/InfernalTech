@@ -154,8 +154,8 @@ public class EnergyNetwork {
 			int sentEnergy = receiver.receiver.receiveEnergy(receiver.face.getOpposite(), energyFromChannel, false);
 			sentEnergy = Math.max(0, sentEnergy);
 			
-			if(sentEnergy > 0)
-				FMLLog.info("Sent %d RF to (%s)", sentEnergy, receiver.pos.toString());
+			/*if(sentEnergy > 0)
+				FMLLog.info("Sent %d RF to (%s)", sentEnergy, receiver.pos.toString());*/
 			
 			actualEnergyStorage -= sentEnergy;
 			servedReceivers++;

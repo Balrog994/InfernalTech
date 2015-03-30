@@ -66,7 +66,4 @@ public class GuiMolecularSeparator extends GuiComponentContainerBase {
         int totalWorkTime = this.tileMolecularSeparator.getField(3);
         return elapsedWorkTime != 0 && totalWorkTime != 0 ? elapsedWorkTime * iconSize / totalWorkTime : 0;
 	}
-	
-	
-
 }

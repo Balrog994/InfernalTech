@@ -5,13 +5,16 @@ import cofh.api.energy.IEnergyReceiver;
 import cofh.api.energy.IEnergyStorage;
 
 import com.balrog.InfernalTech.containers.ContainerMolecularSeparator;
+import com.balrog.InfernalTech.energy.IPowerStorage;
 import com.balrog.InfernalTech.enums.EnumFaceMode;
 import com.balrog.InfernalTech.materials.ItemCoalPowder;
 import com.balrog.InfernalTech.network.PacketHandler;
+import com.balrog.InfernalTech.network.PacketPowerStorage;
 import com.balrog.InfernalTech.recipes.MolecularSeparatorRecipe;
 import com.balrog.InfernalTech.recipes.MolecularSeparatorRecipes;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EnumFaceDirection;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -27,13 +30,16 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityLockable;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.common.FMLLog;
 
-public class TileEntityMolecularSeparator extends TileEntityLockable implements IPersistable, IToolHarvestable, IConfigurableSides, IInventory, IUpdatePlayerListBox, ISidedInventory, IEnergyReceiver {
+public class TileEntityMolecularSeparator extends TileEntityLockable implements IPersistable, IToolHarvestable, IConfigurableSides, IInventory, IUpdatePlayerListBox, ISidedInventory, IPowerStorage, IEnergyReceiver {
+	
+	private final int checkOffset = (int) (Math.random() * 20);
 	
 	public EnumFaceMode[] faceMode = new EnumFaceMode[] {
 		EnumFaceMode.OUTPUT,EnumFaceMode.INPUT,EnumFaceMode.NONE,EnumFaceMode.NONE,EnumFaceMode.NONE,EnumFaceMode.NONE
@@ -45,6 +51,7 @@ public class TileEntityMolecularSeparator extends TileEntityLockable implements 
 	private int totalWorkTime;
 	private int elapsedWorkTime;
 	private int operationProgressTime;
+	private int lastCheckRF = -1;
 	private int[] inputSlots = new int[] { 0 };
 	private int[] outputSlots = new int[] { 1,2 };
 	private int[] noSlots = new int[0];
@@ -366,7 +373,10 @@ public class TileEntityMolecularSeparator extends TileEntityLockable implements 
 				}
 			}
 			
-			PacketHandler.sendToAllAround(new PacketPowerStorage(this), this);
+			if(this.lastCheckRF != this.energyStorage.getEnergyStored() && this.shouldDoWorkThisTick(5)) {
+				this.lastCheckRF = this.energyStorage.getEnergyStored();
+				PacketHandler.sendToAllAround(new PacketPowerStorage(this), this);
+			}
 		}
 	}
 
@@ -481,5 +491,28 @@ public class TileEntityMolecularSeparator extends TileEntityLockable implements 
 	@Override
 	public EnumFaceMode[] getFaceModes() {
 		return this.faceMode;
+	}
+
+	@Override
+	public void setEnergyStored(int storedEnergy) {
+		this.energyStorage.setEnergyStored(storedEnergy);
+	}
+
+	@Override
+	public int getEnergyStored() {
+		return this.energyStorage.getEnergyStored();
+	}
+
+	@Override
+	public BlockPos getPosition() {
+		return this.pos;
+	}
+	
+	protected boolean shouldDoWorkThisTick(int interval) {
+	    return shouldDoWorkThisTick(interval, 0);
+	}
+	
+	protected boolean shouldDoWorkThisTick(int interval, int offset) {
+	    return (this.worldObj.getTotalWorldTime() + checkOffset + offset) % interval == 0;
 	}
 }
