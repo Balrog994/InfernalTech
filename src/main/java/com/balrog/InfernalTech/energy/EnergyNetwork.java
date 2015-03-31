@@ -17,7 +17,6 @@ import com.balrog.InfernalTech.utils.EnergyReceiverEntry;
 import com.balrog.InfernalTech.utils.PositionDirection;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.sun.xml.internal.bind.v2.runtime.reflect.ListIterator;
 
 public class EnergyNetwork {
 	private List<IEnergyChannel> energyChannels = Lists.newArrayList();
