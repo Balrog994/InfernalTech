@@ -3,6 +3,7 @@ package com.balrog.InfernalTech.energy;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
@@ -15,6 +16,7 @@ import cofh.api.energy.IEnergyReceiver;
 
 import com.balrog.InfernalTech.utils.EnergyReceiverEntry;
 import com.balrog.InfernalTech.utils.PositionDirection;
+import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -130,6 +132,7 @@ public class EnergyNetwork {
 	}
 
 	public void update() {
+		//Stopwatch stopwatch = Stopwatch.createStarted();
 		this.updateNetworkStorage();
 		
 		int actualEnergyStorage = this.networkStorage.getEnergyStored();		
@@ -177,6 +180,10 @@ public class EnergyNetwork {
 				actualEnergyStorage -= energyToSend;
 			}
 		}
+		
+		//long microseconds = stopwatch.stop().elapsed(TimeUnit.MICROSECONDS);
+		
+		//FMLLog.info("EnergyNetwork tick: %d us", microseconds);
 	}
 
 	private void updateNetworkStorage() {

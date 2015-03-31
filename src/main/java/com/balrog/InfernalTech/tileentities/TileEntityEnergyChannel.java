@@ -168,6 +168,7 @@ public class TileEntityEnergyChannel extends TileEntity implements IEnergyChanne
 			return;
 		
 		if(!world.isRemote) {
+			FMLLog.info("Updating Neighbors");
 			this.channels.clear();
 			
 			for(EnumFacing face : EnumFacing.values())
@@ -203,6 +204,7 @@ public class TileEntityEnergyChannel extends TileEntity implements IEnergyChanne
 			
 			world.markBlockForUpdate(this.pos);
 		} else {		
+			FMLLog.info("Updating Neighbors");
 			this.markDirty();
 		}
 		

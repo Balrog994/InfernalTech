@@ -136,11 +136,6 @@ public abstract class InfernalTechBlock extends BlockContainer {
 	}
 	
 	@Override
-	protected boolean canSilkHarvest() {
-		return false;
-	}
-	
-	@Override
 	public boolean canSilkHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
 		return false;
 	}
