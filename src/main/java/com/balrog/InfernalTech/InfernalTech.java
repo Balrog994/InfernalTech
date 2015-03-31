@@ -7,6 +7,7 @@ import com.balrog.InfernalTech.energy.EnergyNetworkHandler;
 import com.balrog.InfernalTech.materials.ItemCoalPowder;
 import com.balrog.InfernalTech.network.PacketHandler;
 import com.balrog.InfernalTech.network.PacketPowerStorage;
+import com.balrog.InfernalTech.world.InfernalTechWorldGenHandler;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -48,6 +49,7 @@ public class InfernalTech {
     {
     	boolean isServerSide = event.getSide() == Side.SERVER;
     	
+    	MinecraftForge.ORE_GEN_BUS.register(InfernalTechWorldGenHandler.instance);    	
     	PacketHandler.INSTANCE.registerMessage(new PacketPowerStorage(), PacketPowerStorage.class, PacketHandler.nextID(), Side.CLIENT);
     	
     	NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
