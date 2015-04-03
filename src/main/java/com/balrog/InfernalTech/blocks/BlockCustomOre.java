@@ -13,13 +13,14 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockCustomOre extends BlockOre {
 	
-	public static int maxMetdata = 2;
+	public static int maxMetdata = 16;
 	public PropertyInteger METADATA = PropertyInteger.create("Type", 0, maxMetdata - 1);
 	private boolean init = false;
 
@@ -69,5 +70,10 @@ public class BlockCustomOre extends BlockOre {
 	
 	public int damageDropped(IBlockState state) {
 		return this.getMetaFromState(state);
+	}
+	
+	@Override
+	public int getExpDrop(IBlockAccess world, BlockPos pos, int fortune) {
+		return 0;
 	}
 }
