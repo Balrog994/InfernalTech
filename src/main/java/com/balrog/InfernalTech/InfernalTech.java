@@ -1,5 +1,6 @@
 package com.balrog.InfernalTech;
 
+import com.balrog.InfernalTech.blocks.BlockCustomOre;
 import com.balrog.InfernalTech.blocks.BlockEnergyAccumulator;
 import com.balrog.InfernalTech.blocks.BlockEnergyChannel;
 import com.balrog.InfernalTech.blocks.BlockMolecularSeparator;
@@ -49,7 +50,6 @@ public class InfernalTech {
     {
     	boolean isServerSide = event.getSide() == Side.SERVER;
     	
-    	MinecraftForge.ORE_GEN_BUS.register(InfernalTechWorldGenHandler.instance);    	
     	PacketHandler.INSTANCE.registerMessage(new PacketPowerStorage(), PacketPowerStorage.class, PacketHandler.nextID(), Side.CLIENT);
     	
     	NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
@@ -60,6 +60,9 @@ public class InfernalTech {
     	BlockEnergyAccumulator.init(proxy, isServerSide);
     	BlockEnergyChannel.init(proxy, isServerSide);
     	ItemCoalPowder.init(proxy, isServerSide);
+    	BlockCustomOre.init(proxy, isServerSide);
+    	
+    	MinecraftForge.ORE_GEN_BUS.register(InfernalTechWorldGenHandler.instance);  
     }
     
     @EventHandler

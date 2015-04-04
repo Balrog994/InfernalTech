@@ -4,3 +4,9 @@ block.molecular_separator.name=Molecular Separator
 tile.energy_accumulator.name=Energy Accumulator
 tile.energy_accumulator.tier0.name=Creative Energy Accumulator
 tile.energy_accumulator.tier1.name=Basic Energy Accumulator
+
+tile.block_custom_ore.copper.name=Copper Ore
+tile.block_custom_ore.lead.name=Lead Ore
+tile.block_custom_ore.nickel.name=Nickel Ore
+tile.block_custom_ore.silver.name=Silver Ore
+tile.block_custom_ore.tin.name=Tin Ore

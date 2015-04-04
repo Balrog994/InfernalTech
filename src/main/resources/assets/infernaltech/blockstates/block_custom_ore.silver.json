@@ -1,0 +1,5 @@
+{
+    "variants" : {
+        "normal" : { "model": "infernaltech:block_silver_ore" }
+    }
+}

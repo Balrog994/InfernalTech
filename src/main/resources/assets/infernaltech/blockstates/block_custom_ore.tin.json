@@ -1,0 +1,5 @@
+{
+    "variants" : {
+        "normal" : { "model": "infernaltech:block_tin_ore" }
+    }
+}

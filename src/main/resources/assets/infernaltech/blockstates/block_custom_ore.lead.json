@@ -1,0 +1,5 @@
+{
+    "variants" : {
+        "normal" : { "model": "infernaltech:block_lead_ore" }
+    }
+}
