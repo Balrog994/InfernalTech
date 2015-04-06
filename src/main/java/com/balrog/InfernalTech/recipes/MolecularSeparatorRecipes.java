@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.balrog.InfernalTech.blocks.BlockCustomOre;
+import com.balrog.InfernalTech.materials.ItemOrePowder;
 import com.google.common.collect.Maps;
 
 import net.minecraft.block.Block;
@@ -20,8 +22,17 @@ public class MolecularSeparatorRecipes {
 	public static final MolecularSeparatorRecipes instance = new MolecularSeparatorRecipes();
 	
 	private MolecularSeparatorRecipes() {
+		this.addRecipe(Blocks.stone, new MolecularSeparatorRecipe(2000, new ItemStack(Blocks.cobblestone, 1), null));
+		this.addRecipe(Blocks.cobblestone, new MolecularSeparatorRecipe(2000, new ItemStack(Blocks.sand, 1), null));
+		this.addRecipe(Blocks.redstone_ore, new MolecularSeparatorRecipe(2000, new ItemStack(Items.redstone, 5), new ItemStack(Blocks.cobblestone, 1)));
 		this.addRecipe(Blocks.lapis_ore, new MolecularSeparatorRecipe(2000, new ItemStack(Items.dye, 5, EnumDyeColor.BLUE.getDyeDamage()), new ItemStack(Blocks.cobblestone, 1)));
-		this.addRecipe(Blocks.dirt, new MolecularSeparatorRecipe(2000,	new ItemStack(Items.flower_pot, 5), null));
+		this.addRecipe(Blocks.iron_ore, new MolecularSeparatorRecipe(2000, new ItemStack(ItemOrePowder.iron_powder, 2), new ItemStack(Blocks.cobblestone, 1)));
+		this.addRecipe(Blocks.gold_ore, new MolecularSeparatorRecipe(2000, new ItemStack(ItemOrePowder.gold_powder, 2), new ItemStack(Blocks.cobblestone, 1)));
+		this.addRecipe(BlockCustomOre.copper_ore, new MolecularSeparatorRecipe(2000, new ItemStack(ItemOrePowder.copper_powder, 2), new ItemStack(Blocks.cobblestone, 1)));
+		this.addRecipe(BlockCustomOre.lead_ore, new MolecularSeparatorRecipe(2000, new ItemStack(ItemOrePowder.lead_powder, 2), new ItemStack(Blocks.cobblestone, 1)));
+		this.addRecipe(BlockCustomOre.nickel_ore, new MolecularSeparatorRecipe(2000, new ItemStack(ItemOrePowder.nickel_powder, 2), new ItemStack(Blocks.cobblestone, 1)));
+		this.addRecipe(BlockCustomOre.silver_ore, new MolecularSeparatorRecipe(2000, new ItemStack(ItemOrePowder.silver_powder, 2), new ItemStack(Blocks.cobblestone, 1)));
+		this.addRecipe(BlockCustomOre.tin_ore, new MolecularSeparatorRecipe(2000, new ItemStack(ItemOrePowder.tin_powder, 2), new ItemStack(Blocks.cobblestone, 1)));
 	}
 
 	public void addRecipe(Block input, MolecularSeparatorRecipe recipe) {

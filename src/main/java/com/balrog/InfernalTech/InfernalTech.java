@@ -6,6 +6,7 @@ import com.balrog.InfernalTech.blocks.BlockEnergyChannel;
 import com.balrog.InfernalTech.blocks.BlockMolecularSeparator;
 import com.balrog.InfernalTech.energy.EnergyNetworkHandler;
 import com.balrog.InfernalTech.materials.ItemCoalPowder;
+import com.balrog.InfernalTech.materials.ItemOrePowder;
 import com.balrog.InfernalTech.network.PacketHandler;
 import com.balrog.InfernalTech.network.PacketPowerStorage;
 import com.balrog.InfernalTech.world.InfernalTechWorldGenHandler;
@@ -61,6 +62,7 @@ public class InfernalTech {
     	BlockEnergyChannel.init(proxy, isServerSide);
     	ItemCoalPowder.init(proxy, isServerSide);
     	BlockCustomOre.init(proxy, isServerSide);
+    	ItemOrePowder.init(proxy, isServerSide);
     	
     	MinecraftForge.ORE_GEN_BUS.register(InfernalTechWorldGenHandler.instance);  
     }
